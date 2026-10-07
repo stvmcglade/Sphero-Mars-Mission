@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a111d">
+  <title>Sphero Mission Control · Planet Explorer</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section id="mentorOverlay" class="mentor-overlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <div class="mentor-dialog">
+      <div class="welcome-orbit" aria-hidden="true">◉</div>
+      <p class="eyebrow">Your expedition starts here</p>
+      <h2 id="welcomeTitle">Welcome, explorer.</h2>
+      <p>Code a rover, explore four different worlds, and work your way from landing cadet to planetary mission lead.</p>
+      <label for="studentNameInput">Explorer name</label>
+      <div class="name-entry">
+        <input id="studentNameInput" type="text" maxlength="40" placeholder="Enter your name" autocomplete="off">
+        <button id="saveNameBtn" type="button">Begin expedition →</button>
+      </div>
+      <p id="nameError" class="form-error" role="alert"></p>
+      <p class="welcome-note">16 missions · 4 ranks · Progress saved in this browser<br>Changing the name renames your current expedition.</p>
+    </div>
+  </section>
+  <section id="briefingOverlay" class="briefing-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="briefingTitle" aria-describedby="briefingStory">
+    <div class="briefing-dialog">
+      <div class="briefing-world">
+        <p id="briefingRank" class="eyebrow"></p>
+        <div id="briefingPlanetArt" class="planet-art" aria-hidden="true"><div class="planet-orbit"></div><div class="planet-disc"></div></div>
+        <h2 id="briefingPlanetName"></h2>
+        <p id="briefingPlanetType" class="world-type"></p>
+        <p id="briefingPlanetDescription"></p>
+        <div class="terrain-note"><span>Terrain report</span><p id="briefingTerrain"></p></div>
+        <p class="imagined-note">Glacia, Verdantia, and Pyron are imagined exploration worlds.</p>
+      </div>
+      <div class="briefing-content">
+        <p class="eyebrow">Incoming mission briefing</p>
+        <h2 id="briefingTitle" tabindex="-1"></h2>
+        <p id="briefingStory"></p>
+        <h3>Your mission checklist</h3>
+        <ol id="briefingObjectives"></ol>
+        <div class="learning-note"><span>Coding focus</span><p id="briefingLearning"></p></div>
+        <div class="briefing-actions"><p>Read the scenario, then build your program in the workspace.</p><button id="beginMissionBtn" type="button">Start mission →</button></div>
+      </div>
+    </div>
+  </section>
+  <dialog id="functionGuide" class="function-guide" aria-labelledby="functionGuideTitle" aria-describedby="functionGuideIntro">
+    <header class="function-guide-header"><div><p class="eyebrow">Your coding reference</p><h2 id="functionGuideTitle">Function guide</h2><p id="functionGuideIntro">Explore each command and try a small example. Reading this guide has no point cost.</p></div><button id="closeFunctionGuideBtn" class="quiet-button" type="button" aria-label="Close function guide">Close ✕</button></header>
+    <div class="function-guide-layout">
+      <nav class="function-guide-nav" aria-label="Functions and coding structures"><label for="functionGuideSearch">Find a function</label><input id="functionGuideSearch" type="search" placeholder="Search commands…" autocomplete="off"><div id="functionGuideList" class="function-guide-list"></div></nav>
+      <article id="functionGuideDetail" class="function-guide-detail" tabindex="0" aria-label="Selected function explanation"><p id="guideCategory" class="eyebrow"></p><h3 id="guideFunctionName" tabindex="-1"></h3><code id="guideSignature" class="guide-signature"></code><p id="guideDescription"></p><h4 id="guideArgumentsTitle">Arguments</h4><dl id="guideArguments" class="guide-arguments"></dl><h4>Try this example</h4><pre><code id="guideExample"></code></pre><p id="guideExampleExplanation"></p><aside class="guide-tip"><strong>Remember</strong><p id="guideTip"></p></aside><p id="guideAliases" class="guide-aliases"></p></article>
+    </div>
+  </dialog>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">◉</span><div><p class="eyebrow">Sphero Mission Control</p><h1>Planet Explorer</h1></div></div>
+      <div class="header-right"><span class="simulation-badge"><i></i> Rover simulator</span><button id="openFunctionGuideBtn" class="quiet-button" type="button" aria-haspopup="dialog">Function guide</button><button id="editNameBtn" class="quiet-button" type="button">Explorer profile</button></div>
+    </header>
+    <section class="expedition-strip" aria-label="Expedition progress">
+      <div><span class="eyebrow">Expedition progress</span><strong id="totalProgress">0 of 16 missions</strong><span id="expeditionPoints" class="expedition-points">0 / 16,000 points</span><div class="progress-track"><div id="totalProgressBar"></div></div></div>
+      <div id="rankTrack" class="rank-track"></div>
+    </section>
+    <div class="workspace">
+      <section class="arena-panel" aria-label="Planet rover mission simulator">
+        <div class="arena-toolbar">
+          <div><p id="missionRank" class="eyebrow">Landing Site Cadet</p><h2 id="missionTitle">Loading mission…</h2><p id="missionBrief"></p></div>
+          <div class="mission-select-wrap"><label for="missionSelect">Choose a mission</label><select id="missionSelect"></select></div>
+        </div>
+        <div class="arena-stage">
+          <canvas id="arenaCanvas" width="1280" height="780" aria-label="Planet mission arena: rover, checkpoints, and terrain hazards"></canvas>
+          <section class="compass-card" aria-label="Heading reference">
+            <div class="compass-face"><div id="compassNeedle" class="compass-needle"></div><span class="compass-label north">0</span><span class="compass-label north-east">45</span><span class="compass-label east">90</span><span class="compass-label south-east">135</span><span class="compass-label south">180</span><span class="compass-label south-west">225</span><span class="compass-label west">270</span><span class="compass-label north-west">315</span></div>
+            <p id="headingReadout" class="heading-readout">Heading: 0°</p>
+          </section>
+        </div>
+        <div class="arena-footer"><div class="status-strip" aria-live="polite"><span id="missionStatus">Ready</span><strong id="scoreReadout">0 / 2 goals</strong><span id="missionPoints">Best: —</span></div><p>0° north · 90° east · 180° south · 270° west</p></div>
+      </section>
+      <aside class="side-panel">
+        <section class="mission-card"><div class="card-heading"><p class="eyebrow">Mission briefing</p><button id="viewBriefingBtn" class="quiet-button" type="button">Read scenario</button></div><h2>Your objectives</h2><p id="storyOutput" class="story-output"></p><ol id="objectiveList"></ol><button id="nextMissionBtn" class="next-mission" type="button" hidden>Next mission →</button></section>
+        <section class="score-card" aria-labelledby="scoreTitle">
+          <p class="eyebrow">Mission points</p><div class="score-heading"><h2 id="scoreTitle">Personal best</h2><div><strong id="bestMissionScore">—</strong><span> / 1,000</span></div></div>
+          <p id="scoreFeedback" role="status">Complete every goal to earn points.</p>
+          <dl class="score-stats"><div><dt>Attempts</dt><dd id="attemptCount">0</dd></div><div><dt>Object / boundary hits</dt><dd id="collisionCount">0</dd></div><div><dt>Hint</dt><dd id="hintUseStatus">Not used</dd></div></dl>
+          <ul id="scoreBreakdown" class="score-breakdown" hidden></ul>
+          <details class="scoring-rules"><summary>How points work</summary><p>Earn up to 1,000 points when every goal is complete:</p><ul><li>Completion: 500 points.</li><li>Attempts: 200 points on your first run, minus 20 for each extra run, down to 0.</li><li>Safety: 100 points, minus 20 for each object or boundary hit, down to 0.</li><li>Independent work: 100 points, or 80 if you use a hint. Reopening a hint costs nothing extra.</li><li>Efficiency: up to 60 points for a short safe route and 40 for fewer executed rover commands. The reference route allows for obstacles. Comments and blank lines have no cost; movement speed does not affect points.</li></ul><p>Every press of Run after the briefing counts, including code errors and stopped runs. Resetting, switching missions, and refreshing keep your attempt, impact, and hint history. Your best completed score contributes to the expedition total. Existing completions earn points when you replay them.</p></details>
+        </section>
+        <section class="hint-card"><div class="card-heading"><h2>Flight support</h2><button id="hintBtn" class="quiet-button" type="button">Show hint</button></div><p id="hintOutput">Help is available for every mission.</p></section>
+        <section class="rank-card"><p class="eyebrow">Your achievement</p><h2>Rank certificate</h2><p id="rankWordOutput"></p><div class="rank-guess-row"><button id="rankGuessBtn" type="button">Download certificate</button></div><p id="rankGuessOutput"></p></section>
+        <section class="mentor-card"><h2>Explorer log</h2><p id="mentorReadout"></p><p id="saveStatus" class="save-status" role="status">Saved on this browser</p></section>
+      </aside>
+      <section class="code-panel" aria-label="Mission coding workspace">
+        <div class="panel-heading"><div><p class="eyebrow">Rover program</p><h2>Write. Run. Explore.</h2><p>Python-style commands · Use two spaces to indent</p></div><span class="file-label">mission.py</span></div>
+        <div class="editor-wrap"><div id="lineNumbers" class="line-numbers" aria-hidden="true">1</div><textarea id="codeEditor" spellcheck="false" aria-label="Mission program editor" autocapitalize="off" autocomplete="off" wrap="off"></textarea></div>
+        <div class="code-actions"><div class="action-row"><button id="runBtn" type="button">▶ Run code</button><button id="stopBtn" type="button" disabled>■ Stop</button><button id="resetBtn" type="button">Reset rover</button><button id="resetCodeBtn" type="button">Starter code</button></div><button id="codeFunctionGuideBtn" class="quiet-button" type="button" aria-haspopup="dialog">Function guide</button><span class="shortcut">Ctrl + Enter to run</span></div>
+        <details class="command-list"><summary>Command reference <span>Movement, signals &amp; logic</span></summary><div class="command-grid"><div><code>roll(70, 90, 2)</code><p>Speed 0–100, heading in degrees, seconds 0–10.</p><code>turn(90)</code><p>Turn clockwise relative to the current heading.</p><code>set_heading(0)</code><p>Face a specific compass direction.</p></div><div><code>collect()</code><p>Collect a sample at the next checkpoint.</p><code>flash_colour_code("orange-blue")</code><p>Send the required signal at a beacon.</p><code>set_color("orange")</code><p>Change the rover light.</p></div><div><code>for step in range(1, 4):</code><p>Repeat for steps 1, 2, and 3.</p><code>if step &lt; 3: … else:</code><p>Choose an action. Indent the lines inside each block.</p><code>wait(1) · say("Hello") · stop()</code><p>Pause, display a message, or finish the program.</p></div></div></details>
+      </section>
+      <section class="log-card"><div class="card-heading"><div><p class="eyebrow">Mission telemetry</p><h2>Run log</h2></div><button id="downloadCodeBtn" class="quiet-button" type="button">↓ Save code</button></div><div id="logOutput" class="log-output" role="log" aria-live="polite"></div></section>
+    </div>
+    <footer class="page-footer">Sphero Mission Control · Planet Explorer <span>Four worlds. Sixteen missions. One expedition.</span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
